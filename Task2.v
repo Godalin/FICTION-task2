@@ -1,24 +1,43 @@
-(* We will use Coq lists in this Task. Please check the Doc. *)
+(** Welcome to Task 2 of FICTION! *)
+
+(** We will use the Coq standard library in this Task.
+    If you have any question, please check the docs. *)
 
 Require Import PeanoNat.
+(* In the submodule Nat, you can find useful natural number theorems,
+    e.g., [Nat.le_add_r] gives the proof of
+    a <= a + b for all natural numbers a and b *)
+
 Require Import Bool.
+(* The standard Boolean library. 
+    Please note the definition of [reflect]. *)
+
 Require Import List.
 Import ListNotations.
+(* Also, theorems for lists. *)
 
 
-(* We will use the following term `magic` to represent holes *)
+
+(** We will use the following term [magic] to represent holes.
+    You have to replace every [magic] with your solution. *)
 Axiom magic : forall {A}, A.
 Check magic.
 
-Example FermatLast :
+Theorem FermatLast :
   forall n : nat, n >= 3 -> ~ exists a b c, a^n + b^n = c^n.
 Proof. exact magic. Qed.
 
+(** Or we will use the [Admitted] command to if we want (part of)
+    the whole proof. *)
+Example FermatLast' :
+  forall n : nat, n >= 3 -> ~ exists a b c, a^n + b^n = c^n.
+Proof. intros. Admitted.
 
 
 
 
-(* Regular Expressions *)
+
+(** Part 1. Regular Expressions *)
 
 Inductive reg_exp (T : Type) : Type :=
   | EmptySet
@@ -165,6 +184,10 @@ Qed.
 (** (Note the use of [app_nil_r] to change the goal of the theorem to
     exactly the same shape expected by [MStarApp].) *)
 
+
+
+
+
 (** **** Exercise: 3 stars, standard (exp_match_ex1)
 
     The following lemmas show that the informal matching rules given
@@ -193,6 +216,10 @@ Lemma MStar' : forall T (ss : list (list T)) (re : reg_exp T),
 Proof.
   (* FILL IN HERE *) Admitted.
 (** [] *)
+
+
+
+
 
 (** Since the definition of [exp_match] has a recursive
     structure, we might expect that proofs involving regular
@@ -464,13 +491,18 @@ Fixpoint pumping_constant {T} (re : reg_exp T) : nat :=
 (** You may find these lemmas about the pumping constant useful when
     proving the pumping lemma below. *)
 
+
+
+(* TODO This can also be a problem.
+    Ask the students to find lemmas in the standard lib. *)
+
 Check Nat.le_trans.
 
 Lemma pumping_constant_ge_1 :
   forall T (re : reg_exp T),
     pumping_constant re >= 1.
-Proof. Admitted.
-(*   intros T re. induction re.
+Proof.
+  intros T re. induction re.
   - (* EmptySet *)
     apply le_n.
   - (* EmptyStr *)
@@ -479,15 +511,15 @@ Proof. Admitted.
     apply le_S. apply le_n.
   - (* App *)
     simpl.
-    apply Nat.le_trans with (n:=pumping_constant re1).
-    apply IHre1. apply Nat.le_plus_l.
+    apply Nat.le_trans with (m:=pumping_constant re1).
+    apply IHre1. apply Nat.le_add_r.
   - (* Union *)
     simpl.
-    apply Nat.le_trans with (n:=pumping_constant re1).
-    apply IHre1. apply le_plus_l.
+    apply Nat.le_trans with (m:=pumping_constant re1).
+    apply IHre1. apply Nat.le_add_r.
   - (* Star *)
     simpl. apply IHre.
-Qed. *)
+Qed.
 
 Lemma pumping_constant_0_false :
   forall T (re : reg_exp T),
@@ -603,7 +635,7 @@ End Pumping.
 
 
 (* ================================================================= *)
-(** ** Extended Exercise: A Verified Regular-Expression Matcher *)
+(** ** Advanced Task: A Verified Regular-Expression Matcher *)
 
 (** We have now defined a match relation over regular expressions and
     polymorphic lists. We can use such a definition to manually prove that
@@ -729,6 +761,10 @@ Proof.
     rewrite Happ. apply (MApp s0 _ s1 _ Hmat0 Hmat1).
 Qed.
 
+
+
+
+
 (** **** Exercise: 3 stars, standard, optional (app_ne)
 
     [App re0 re1] matches [a::s] iff [re0] matches the empty string
@@ -747,6 +783,10 @@ Proof.
   (* FILL IN HERE *) Admitted.
 (** [] *)
 
+
+
+
+
 (** [s] matches [Union re0 re1] iff [s] matches [re0] or [s] matches [re1]. *)
 Lemma union_disj : forall (s : string) re0 re1,
   s =~ Union re0 re1 <-> s =~ re0 \/ s =~ re1.
@@ -759,6 +799,10 @@ Proof.
     + apply MUnionL. apply H.
     + apply MUnionR. apply H.
 Qed.
+
+
+
+
 
 (** **** Exercise: 3 stars, standard, optional (star_ne)
 
@@ -783,12 +827,20 @@ Proof.
   (* FILL IN HERE *) Admitted.
 (** [] *)
 
+
+
+
+
 (** The definition of our regex matcher will include two fixpoint
     functions. The first function, given regex [re], will evaluate to a
     value that reflects whether [re] matches the empty string. The
     function will satisfy the following property: *)
 Definition refl_matches_eps m :=
   forall re : reg_exp ascii, reflect ([ ] =~ re) (m re).
+
+
+
+
 
 (** **** Exercise: 2 stars, standard, optional (match_eps)
 
@@ -797,6 +849,10 @@ Definition refl_matches_eps m :=
 Fixpoint match_eps (re: reg_exp ascii) : bool
   (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
 (** [] *)
+
+
+
+
 
 (** **** Exercise: 3 stars, standard, optional (match_eps_refl)
 
@@ -827,6 +883,10 @@ Definition is_der re (a : ascii) re' :=
     satisfies the following property: *)
 Definition derives d := forall a re, is_der re a (d a re).
 
+
+
+
+
 (** **** Exercise: 3 stars, standard, optional (derive)
 
     Define [derive] so that it derives strings. One natural
@@ -835,6 +895,10 @@ Definition derives d := forall a re, is_der re a (d a re).
 Fixpoint derive (a : ascii) (re : reg_exp ascii) : reg_exp ascii
   (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
 (** [] *)
+
+
+
+
 
 (** The [derive] function should pass the following tests. Each test
     establishes an equality between an expression that will be
@@ -886,6 +950,10 @@ Example test_der7 :
 Proof.
   (* FILL IN HERE *) Admitted.
 
+
+
+
+
 (** **** Exercise: 4 stars, standard, optional (derive_corr)
 
     Prove that [derive] in fact always derives strings.
@@ -922,6 +990,10 @@ Proof.
 Definition matches_regex m :=
   forall (s : string) re, reflect (s =~ re) (m s re).
 
+
+
+
+
 (** **** Exercise: 2 stars, standard, optional (regex_match)
 
     Complete the definition of [regex_match] so that it matches
@@ -929,6 +1001,10 @@ Definition matches_regex m :=
 Fixpoint regex_match (s : string) (re : reg_exp ascii) : bool
   (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
 (** [] *)
+
+
+
+
 
 (** **** Exercise: 3 stars, standard, optional (regex_match_correct)
 

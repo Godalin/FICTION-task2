@@ -6,6 +6,17 @@ Require Import List.
 Import ListNotations.
 
 
+(* We will use the following term `magic` to represent holes *)
+Axiom magic : forall {A}, A.
+Check magic.
+
+Example FermatLast :
+  forall n : nat, n >= 3 -> ~ exists a b c, a^n + b^n = c^n.
+Proof. exact magic. Qed.
+
+
+
+
 
 (* Regular Expressions *)
 

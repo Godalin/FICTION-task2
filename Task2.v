@@ -301,6 +301,8 @@ Proof.
       apply (IH2 Hin).
 Qed.
 
+
+
 (** **** Exercise: 4 stars, standard (re_not_empty)
 
     Write a recursive function [re_not_empty] that tests whether a
@@ -451,7 +453,7 @@ Qed.
 Lemma MStar'' : forall T (s : list T) (re : reg_exp T),
   s =~ Star re ->
   exists ss : list (list T),
-    s = concat []
+    s = concat ss
     /\ forall s', In s' ss -> s' =~ re.
 Proof.
   (* FILL IN HERE *) Admitted.
@@ -493,10 +495,6 @@ Fixpoint pumping_constant {T} (re : reg_exp T) : nat :=
 
 
 
-(* TODO This can also be a problem.
-    Ask the students to find lemmas in the standard lib. *)
-
-Check Nat.le_trans.
 
 Lemma pumping_constant_ge_1 :
   forall T (re : reg_exp T),
@@ -635,7 +633,7 @@ End Pumping.
 
 
 (* ================================================================= *)
-(** ** Advanced Task: A Verified Regular-Expression Matcher *)
+(** ** Part 2. Advanced Task: A Verified Regular-Expression Matcher *)
 
 (** We have now defined a match relation over regular expressions and
     polymorphic lists. We can use such a definition to manually prove that

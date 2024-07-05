@@ -444,7 +444,7 @@ Proof.
       * apply H1.
 Qed.
 
-(** **** Exercise: 4 stars, standard, optional (exp_match_ex2) *)
+(** **** Exercise: 4 stars, standard (exp_match_ex2) *)
 
 (** The [MStar''] lemma below (combined with its converse, the
     [MStar'] exercise above), shows that our definition of [exp_match]
@@ -599,7 +599,7 @@ Proof.
 
 (* Finally, the pumping lemma. *)
 
-(** **** Exercise: 5 stars, advanced, optional (pumping)
+(** **** Exercise: 5 stars, advanced (pumping)
 
     Now here is the usual version of the pumping lemma. In addition to
     requiring that [s2 <> []], it also requires that [length s1 +
@@ -763,7 +763,7 @@ Qed.
 
 
 
-(** **** Exercise: 3 stars, standard, optional (app_ne)
+(** **** Exercise: 3 stars, standard (app_ne)
 
     [App re0 re1] matches [a::s] iff [re0] matches the empty string
     and [a::s] matches [re1] or [s=s0++s1], where [a::s0] matches [re0]
@@ -802,7 +802,7 @@ Qed.
 
 
 
-(** **** Exercise: 3 stars, standard, optional (star_ne)
+(** **** Exercise: 3 stars, standard (star_ne)
 
     [a::s] matches [Star re] iff [s = s0 ++ s1], where [a::s0] matches
     [re] and [s1] matches [Star re]. Like [app_ne], this observation is
@@ -840,7 +840,7 @@ Definition refl_matches_eps m :=
 
 
 
-(** **** Exercise: 2 stars, standard, optional (match_eps)
+(** **** Exercise: 2 stars, standard (match_eps)
 
     Complete the definition of [match_eps] so that it tests if a given
     regex matches the empty string: *)
@@ -852,7 +852,7 @@ Fixpoint match_eps (re: reg_exp ascii) : bool
 
 
 
-(** **** Exercise: 3 stars, standard, optional (match_eps_refl)
+(** **** Exercise: 3 stars, standard (match_eps_refl)
 
     Now, prove that [match_eps] indeed tests if a given regex matches
     the empty string.  (Hint: You'll want to use the reflection lemmas
@@ -885,7 +885,7 @@ Definition derives d := forall a re, is_der re a (d a re).
 
 
 
-(** **** Exercise: 3 stars, standard, optional (derive)
+(** **** Exercise: 3 stars, standard (derive)
 
     Define [derive] so that it derives strings. One natural
     implementation uses [match_eps] in some cases to determine if key
@@ -952,7 +952,7 @@ Proof.
 
 
 
-(** **** Exercise: 4 stars, standard, optional (derive_corr)
+(** **** Exercise: 4 stars, standard (derive_corr)
 
     Prove that [derive] in fact always derives strings.
 
@@ -992,7 +992,7 @@ Definition matches_regex m :=
 
 
 
-(** **** Exercise: 2 stars, standard, optional (regex_match)
+(** **** Exercise: 2 stars, standard (regex_match)
 
     Complete the definition of [regex_match] so that it matches
     regexes. *)
@@ -1004,7 +1004,7 @@ Fixpoint regex_match (s : string) (re : reg_exp ascii) : bool
 
 
 
-(** **** Exercise: 3 stars, standard, optional (regex_match_correct)
+(** **** Exercise: 3 stars, standard (regex_match_correct)
 
     Finally, prove that [regex_match] in fact matches regexes.
 

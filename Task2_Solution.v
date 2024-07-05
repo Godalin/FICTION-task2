@@ -9,13 +9,19 @@ Require Import PeanoNat.
     a <= a + b for all natural numbers a and b *)
 
 Require Import Bool.
-(* The standard Boolean library. 
+(* The standard Boolean library.
     Please note the definition of [reflect]. *)
 
 Require Import List.
 Import ListNotations.
 (* Also, theorems for lists. *)
 
+
+(** You can use [Search] or [About] anywhere to find information
+    about the lemmas you want, even in proof mode.
+    For details about how to use these commands, check the docs. *)
+Search (_ <= _ -> _ <= _ + _).
+About Nat.le_trans.
 
 
 (** We will use the following term [magic] to represent holes.
@@ -662,7 +668,43 @@ Proof.
       split. assumption. intros.
       rewrite <- (app_assoc s1 x _). constructor.
       assumption. apply (H5 m).
-  - Admitted.
+  - intros. simpl in H.
+    Search (_ + _ <= _ -> _ <= _).
+    About Nat.le_trans.
+    assert (pumping_constant re1 <= length s1).
+    { apply (Nat.le_trans _ (pumping_constant re1 + pumping_constant re2)).
+      apply Nat.le_add_r. assumption. }
+    destruct (IH H0) as [x [y [z [HH1 [HH2 HH3]]]]].
+    exists x. exists y. exists z. split. assumption.
+    split. assumption. intro. apply MUnionL. apply (HH3 m).
+  - intros. simpl in H.
+    assert (pumping_constant re2 <= length s2).
+    { apply (Nat.le_trans _ (pumping_constant re1 + pumping_constant re2)).
+      apply Nat.le_add_l. assumption. }
+    destruct (IH H0) as [x [y [z [HH1 [HH2 HH3]]]]].
+    exists x. exists y. exists z. split. assumption.
+    split. assumption. intro. apply MUnionR. apply (HH3 m).
+  - simpl. intros.
+    assert (forall x : nat, x <= 0 -> x = 0).
+    { intros. inversion H0.  reflexivity. }
+    apply H0 in H. apply pumping_constant_0_false in H. inversion H.
+  - simpl in *. intros.
+    exists []. exists (s1 ++ s2). exists [].
+    split. simpl. rewrite <- app_assoc. simpl.
+    rewrite app_nil_r. reflexivity.
+    (* here we want to prove that length (s1 ++ s2) > 0 *)
+    split. intro. rewrite H0 in H. simpl in H.
+    Check pumping_constant_0_false.
+    assert (forall x : nat, x <= 0 -> x = 0).
+    { intros. inversion H1. reflexivity. }
+    apply (pumping_constant_0_false T re).
+    apply H1. assumption.
+    intro m. simpl. rewrite app_nil_r.
+    induction m.
+    + simpl. constructor.
+    + simpl. apply star_app.
+      constructor. assumption. assumption.
+      assumption. Qed.
   (* FILL IN HERE *)
 (** [] *)
 
@@ -696,7 +738,22 @@ Proof.
        | re | s1 s2 re Hmatch1 IH1 Hmatch2 IH2 ].
   - (* MEmpty *)
     simpl. intros contra. inversion contra.
-  (* FILL IN HERE *) Admitted.
+  - simpl. intros contra. inversion contra. inversion H0.
+  - simpl. intros H. rewrite app_length in H.
+    apply add_le_cases in H. inversion H.
+    + destruct (IH1 H0) as [x [y [z [HH1 [HH2 [HH3 HH4]]]]]].
+      exists x. exists y. exists (z ++ s2).
+      split. rewrite HH1. rewrite (app_assoc x y z).
+      rewrite <- (app_assoc _ z s2). rewrite (app_assoc x y _).
+      reflexivity.
+      split. assumption.
+      split. apply (Nat.le_trans _ (pumping_constant re1)).
+      apply HH3. apply (Nat.le_add_r).
+      intros m. rewrite (app_assoc x). rewrite (app_assoc _ z).
+      rewrite <- (app_assoc x).
+      constructor. apply (HH4 m). assumption.
+Admitted.
+  (* FILL IN HERE *)
 
 End Pumping.
 (** [] *)

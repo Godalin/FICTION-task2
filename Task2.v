@@ -5,7 +5,7 @@
 
     https://coq.inria.fr/doc/v8.19/stdlib/index.html
 
-    Remember to take advantage of the Internet & ChatGPT! *)
+    Remember to take advantage of the Internet! *)
 
 Require Import PeanoNat.
 (* In the submodule Nat, you can find useful natural number theorems,

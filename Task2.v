@@ -16,7 +16,8 @@ Print Module Nat.
 
 Require Import Bool.
 (* The standard library for Boolean.
-    Please check the definition of [reflect]. *)
+    Please check the definition of [reflect] later.
+    When meet with [reflect], you will then be given a hint. *)
 Print Module Bool.
 Print reflect.
 
@@ -887,8 +888,9 @@ Fixpoint match_eps (re: reg_exp ascii) : bool :=
 (** **** Exercise: 3 stars, standard (match_eps_refl)
 
     Now, prove that [match_eps] indeed tests if a given regex matches
-    the empty string.  (Hint: You'll want to use the reflection lemmas
-    [ReflectT] and [ReflectF].) *)
+    the empty string.
+    (Hint: Please check the doc of [reflect]!
+      You'll want to use the reflection lemmas [ReflectT] and [ReflectF].) *)
 Lemma match_eps_refl : refl_matches_eps match_eps.
 Proof.
   (* FILL IN HERE *) Admitted.
@@ -917,11 +919,14 @@ Definition derives d := forall a re, is_der re a (d a re).
 
 
 
-(** **** Exercise: 3 stars, standard (derive)
+(** **** Exercise: 4 stars, standard (derive)
 
     Define [derive] so that it derives strings. One natural
     implementation uses [match_eps] in some cases to determine if key
     regex's match the empty string. *)
+
+(** Hint: Think carefully about the [App] case. *)
+
 Fixpoint derive (a : ascii) (re : reg_exp ascii) : reg_exp ascii :=
   (* FILL IN HERE *) magic.
 (** [] *)
@@ -984,7 +989,7 @@ Proof.
 
 
 
-(** **** Exercise: 4 stars, standard (derive_corr)
+(** **** Exercise: 5 stars, standard (derive_corr)
 
     Prove that [derive] in fact always derives strings.
 
@@ -1004,7 +1009,14 @@ Proof.
     re0 re1]) to a Boolean combination of [Prop]'s over simple
     regex's (e.g., [s =~ re0 \/ s =~ re1]) using lemmas given above
     that are logical equivalences. You can then reason about these
-    [Prop]'s naturally using [intro] and [destruct]. *)
+    [Prop]'s naturally using [intro] and [destruct].
+
+    Hint again: Please check [eqb_spec].
+    With this you can convert between bool and equation Props. *)
+
+Check eqb_spec.
+Check match_eps_refl.
+
 Lemma derive_corr : derives derive.
 Proof.
   (* FILL IN HERE *) Admitted.
@@ -1028,7 +1040,7 @@ Definition matches_regex m :=
 
 
 
-(** **** Exercise: 2 stars, standard (regex_match)
+(** **** Exercise: 3 stars, standard (regex_match)
 
     Complete the definition of [regex_match] so that it matches
     regexes. *)
@@ -1040,7 +1052,7 @@ Fixpoint regex_match (s : string) (re : reg_exp ascii) : bool :=
 
 
 
-(** **** Exercise: 3 stars, standard (regex_match_correct)
+(** **** Exercise: 4 stars, standard (regex_match_correct)
 
     Finally, prove that [regex_match] in fact matches regexes.
 

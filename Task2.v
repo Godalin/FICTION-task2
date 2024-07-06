@@ -3,7 +3,7 @@
 (** We will use the Coq standard library in this Task.
     If you have any question, please check the docs:
 
-    https://coq.inria.fr/doc/v8.9/stdlib/index.html
+    https://coq.inria.fr/doc/v8.19/stdlib/index.html
 
     Remember to take advantage of the Internet & ChatGPT! *)
 
@@ -40,7 +40,8 @@ Theorem FermatLast :
 Proof. exact magic. Qed.
 
 (** Or we will use the [Admitted] command to if we want (part of)
-    the whole proof. *)
+    the whole proof.
+    Again, replace it with your code and end it with [Qed.] *)
 Example FermatLast' :
   forall n : nat, n >= 3 -> ~ exists a b c, a^n + b^n = c^n.
 Proof. intros. Admitted.
@@ -510,11 +511,11 @@ Fixpoint pumping_constant {T} (re : reg_exp T) : nat :=
   | Star r => pumping_constant r
   end.
 
+
+
+
 (** You may find these lemmas about the pumping constant useful when
     proving the pumping lemma below. *)
-
-
-
 
 Lemma pumping_constant_ge_1 :
   forall T (re : reg_exp T),
@@ -592,6 +593,15 @@ Qed.
     also guaranteed not to be the empty string, this gives us
     a (constructive!) way to generate strings matching [re] that are
     as long as we like. *)
+
+
+(** Hint: You may also find this theorem useful: *)
+Theorem add_le_cases : forall n m p q,
+  n + m <= p + q -> n <= p \/ m <= q.
+  (** Hint again: May be easiest to prove by induction on [n]. *)
+Proof. Admitted.
+
+
 
 Lemma weak_pumping : forall T (re : reg_exp T) s,
   s =~ re ->

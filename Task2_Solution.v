@@ -909,7 +909,21 @@ Lemma app_ne : forall (a : ascii) s re0 re1,
   ([ ] =~ re0 /\ a :: s =~ re1) \/
   exists s0 s1, s = s0 ++ s1 /\ a :: s0 =~ re0 /\ s1 =~ re1.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. rewrite app_exists. split.
+  - intros [s0 [s1 [A [B C]]]].
+    destruct s0 as [|b s0].
+    + left. split. assumption. simpl in A. rewrite A. assumption.
+    + right. simpl in A. inversion A.
+      exists s0. exists s1.
+      split. reflexivity.
+      split. assumption.
+      assumption.
+  - intros. destruct H as [A B|[s0 [s1 [A [B C]]]]].
+    + exists []. exists (a :: s).
+      split. auto. assumption.
+    + exists (a :: s0). exists s1. split. simpl. rewrite A. reflexivity.
+      split. assumption. assumption. Qed.
+  (* FILL IN HERE *)
 (** [] *)
 
 
@@ -953,11 +967,15 @@ Lemma star_ne : forall (a : ascii) s re,
   a :: s =~ Star re <->
   exists s0 s1, s = s0 ++ s1 /\ a :: s0 =~ re /\ s1 =~ Star re.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. split.
+  - intro. inversion H.
+    destruct s1. simpl in *.
+    Admitted.
+  (* FILL IN HERE *)
 (** [] *)
 
 
-
+Check star_ne.
 
 
 (** The definition of our regex matcher will include two fixpoint
@@ -975,8 +993,15 @@ Definition refl_matches_eps m :=
 
     Complete the definition of [match_eps] so that it tests if a given
     regex matches the empty string: *)
-Fixpoint match_eps (re: reg_exp ascii) : bool
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
+Fixpoint match_eps (re: reg_exp ascii) : bool :=
+  match re with
+  | EmptySet => false
+  | EmptyStr => true
+  | Char _ => false
+  | App re1 re2 => match_eps re1 && match_eps re2
+  | Union re1 re2 => match_eps re1 || match_eps re2
+  | Star _ => true
+  end.
 (** [] *)
 
 
@@ -1152,3 +1177,17 @@ Theorem regex_match_correct : matches_regex regex_match.
 Proof.
   (* FILL IN HERE *) Admitted.
 (** [] *)
+
+
+
+
+(* Part 3: 可行性已经验证过了 *)
+
+Inductive production (T N : Type) : Type :=
+  | term : T -> production T N
+  | nont : T -> N -> production T N.
+
+Record grammar (T N : Type) :=
+  { start : N
+  ; rules : N -> list (production T N)
+  }.

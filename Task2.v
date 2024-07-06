@@ -1,20 +1,32 @@
 (** Welcome to Task 2 of FICTION! *)
 
 (** We will use the Coq standard library in this Task.
-    If you have any question, please check the docs. *)
+    If you have any question, please check the docs:
+
+    https://coq.inria.fr/doc/v8.9/stdlib/index.html
+
+    Remember to take advantage of the Internet & ChatGPT! *)
 
 Require Import PeanoNat.
 (* In the submodule Nat, you can find useful natural number theorems,
     e.g., [Nat.le_add_r] gives the proof of
     a <= a + b for all natural numbers a and b *)
+Check Nat.le_add_r.
+Print Module Nat.
 
 Require Import Bool.
-(* The standard Boolean library. 
-    Please note the definition of [reflect]. *)
+(* The standard library for Boolean.
+    Please check the definition of [reflect]. *)
+Print Module Bool.
+Print reflect.
 
 Require Import List.
 Import ListNotations.
-(* Also, theorems for lists. *)
+(* Also, We need theorems for lists, e.g., *)
+Check app_nil_r.
+Check app_length.
+
+
 
 
 
@@ -444,6 +456,10 @@ Proof.
       * apply H1.
 Qed.
 
+
+
+
+
 (** **** Exercise: 4 stars, standard (exp_match_ex2) *)
 
 (** The [MStar''] lemma below (combined with its converse, the
@@ -458,6 +474,10 @@ Lemma MStar'' : forall T (s : list T) (re : reg_exp T),
 Proof.
   (* FILL IN HERE *) Admitted.
 (** [] *)
+
+
+
+
 
 (** **** Exercise: 5 stars, advanced (weak_pumping)
 
@@ -594,6 +614,8 @@ Proof.
     simpl. intros contra. inversion contra.
   (* FILL IN HERE *) Admitted.
 (** [] *)
+
+
 
 
 
@@ -978,6 +1000,10 @@ Proof.
   (* FILL IN HERE *) Admitted.
 (** [] *)
 
+
+
+
+
 (** We'll define the regex matcher using [derive]. However, the only
     property of [derive] that you'll need to use in all proofs of
     properties of the matcher is [derive_corr]. *)
@@ -1021,3 +1047,10 @@ Theorem regex_match_correct : matches_regex regex_match.
 Proof.
   (* FILL IN HERE *) Admitted.
 (** [] *)
+
+
+
+
+
+(* ================================================================= *)
+(** ** Part 3. Extensional Task: What else can you do? (optional) *)
